@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "prepare": "husky install"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -22,14 +23,9 @@
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4"
   },
-  "lint-staged" : {
-    "routes/**/*.{ts,tsx}" : [
-      "eslint --ext .tsx --ext .ts routes/ --fix"
+  "lint-staged": {
+    "routes/**/*.{js,ts,jsx,tsx}": [
+      "eslint --fix"
     ]
-  },
-  "husky" : {
-    "hooks" : {
-      "pre-commit" : "lint-staged"
-    }
   }
 }
