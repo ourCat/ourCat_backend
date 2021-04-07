@@ -1,8 +1,6 @@
 const router = require('express').Router();
+const swagger = require('./swagger/swagger')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.use('/', swagger)
 
 module.exports = router;
