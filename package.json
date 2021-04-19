@@ -3,15 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "tsc-watch --onSuccess \" node dist/app.js\" ",
+    "start": "tsc-watch --onSuccess \" node ./bin/www\" ",
     "prepare": "husky install"
   },
   "dependencies": {
+    "app-module-path": "^2.2.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "mongodb": "^3.6.6",
     "morgan": "~1.9.1",
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.1.6"
