@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const app = express()
 
+require('app-module-path').addPath(__dirname)
 const routes = require('./routes')
 
 // view engine setup
