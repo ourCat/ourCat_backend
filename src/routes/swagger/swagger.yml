@@ -5,5 +5,22 @@ components:
       properties:
         name:
           type: string
-        id:
+        email:
           type: string
+        phone:
+          type: string
+        profileImage:
+          type: string
+    Cat:
+      type: object
+      properties:
+        name:
+          type: string
+        profileImage:
+          type: string
+        tag:
+          type: array
+          items:
+            type: string
+
+
