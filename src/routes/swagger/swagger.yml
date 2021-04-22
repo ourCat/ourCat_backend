@@ -22,5 +22,11 @@ components:
           type: array
           items:
             type: string
+    Content:
+      type: object
+      properties:
+        title:
+          type: string
+
 
 
