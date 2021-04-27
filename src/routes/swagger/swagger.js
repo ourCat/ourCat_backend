@@ -13,14 +13,15 @@ const swaggerDefinition = {
   servers: [
     { url: '/' }
   ],
-  securitySchemes: {
-    jwt: {
-      type: 'apiKey',
-      name: 'Authorization',
-      in: 'header'
+  components: {
+    securitySchemes: {
+      token: {
+        type: 'http',
+        scheme: 'Bearer',
+      }
     }
   },
-  security: [{ jwt: [] }]
+  security: [{ token: [] }]
 }
 
 const options = {
