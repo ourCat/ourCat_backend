@@ -8,6 +8,7 @@ paths:
     post:
       tags:
       - User
+      summary: 회원가입 API
       requestBody:
         content:
           application/json:
@@ -52,7 +53,7 @@ paths:
                     example: OK
         400:
           description: |
-            `required Body` body에 필수값 누락
+            `Required Body` body에 필수값 누락
 
             `Invalid gender value` gender는 M 또는 F 여야만 함
             
@@ -63,7 +64,42 @@ paths:
             `Id Already exists` 이미 존재하는 login Id (email 주소)
         500:
           description: '**관리자에게 문의하세요**'
+  /user/signin:
+    post:
+      tags:
+      - User
+      summary: 로그인 API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                loginId:
+                  type: string
+                password:
+                  type: string
+              required:
+              - loginId
+              - password
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userToken:
+                    type: string
+                    description: 로그인시 부여되는 토큰
+        400:
+          description: |
+            `Required Body` 로그인ID 또는 password 누락
 
+            `Invalid loginId or password` 로그인 ID 또는 password가 잘못됨
+        500:
+          description: '**관리자에게 문의하세요**'
 
 components:
   schemas:
