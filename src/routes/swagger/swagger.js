@@ -21,7 +21,7 @@ const swaggerDefinition = {
       }
     }
   },
-  security: [{ token: [] }]
+  // security: [{ token: [] }]
 }
 
 const options = {
