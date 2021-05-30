@@ -6,12 +6,15 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const app = express()
 
+const PORT = process.env.PORT || '8080'
+
 require('app-module-path').addPath(__dirname)
 const routes = require('./routes')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
+app.set('port', PORT)
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
