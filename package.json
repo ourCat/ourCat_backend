@@ -3,15 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "tsc-watch --onSuccess \" node ./bin/www\" ",
     "prepare": "husky install"
   },
   "dependencies": {
+    "app-module-path": "^2.2.0",
+    "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",
+    "dayjs": "^1.10.5",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.6",
     "morgan": "~1.9.1",
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.1.6"
@@ -23,6 +29,7 @@
     "eslint": "^7.23.0",
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
+    "tsc-watch": "^4.2.9",
     "typescript": "^4.2.4"
   },
   "lint-staged": {

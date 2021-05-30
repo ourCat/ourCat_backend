@@ -1,9 +1,20 @@
 components:
-  schemas:
-    User:
+    Cat:
       type: object
       properties:
         name:
           type: string
-        id:
+        profileImage:
           type: string
+        tag:
+          type: array
+          items:
+            type: string
+    Content:
+      type: object
+      properties:
+        title:
+          type: string
+
+
+

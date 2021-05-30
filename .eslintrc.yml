@@ -4,6 +4,7 @@ env:
   node: true
 ignorePatterns:
   - "dist/**/*"
+  - "bin"
 extends:
   - 'eslint:recommended'
   - 'plugin:@typescript-eslint/recommended'
