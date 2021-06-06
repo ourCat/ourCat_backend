@@ -1,3 +1,15 @@
 @local = http://localhost:3000
 
-{{local}}/users
+{{local}}/user
+###
+POST {{local}}/user/signin
+Content-Type: application/json
+
+{
+  "loginId": "apitest@test.com",
+  "password" : "1q2w3e4r@@"
+}
+
+###
+{{local}}/token
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGFlNzQxZmU3Zjk0ODE3ZGQ3OTE2ZDYiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYyNTU2Mjg0NCwiaWF0IjoxNjIyOTcwODQ0fQ.mUgkTIzeff4t6b0_Lueggg4OUT7BmldRDDqs2TFiZX0
