@@ -44,6 +44,11 @@ async function getUsers() : Promise<Array<FoundUser>> {
   return await db.collection('User').find({deactvate: {$exists: false}}, {sort: {_id: -1}, limit: 20}).toArray()
 }
 
+/**
+ * userId로 user정보를 찾는 함수 (비활성화된 사용자는 제외)
+ * @param userId 
+ * @returns 사용자정보
+ */
 async function getUserById(userId: string) : Promise<FoundUser> {
   const db = await connect()
   return await db.collection('User').findOne(
@@ -51,4 +56,23 @@ async function getUserById(userId: string) : Promise<FoundUser> {
   )
 }
 
-export { getUserByLoginId, signup, getUsers, getUserById }
+/**
+ * 사용자 비활성화
+ * @param userId 
+ * @param reason 
+ */
+async function deactvateUser(userId: string, reason: string) : Promise<void> {
+  const db = await connect()
+  await db.collection('User').updateOne(
+    {_id: ObjectId(userId)},
+    {$set: {
+      socialId: null,
+      deactvate: {
+        reason,
+        deactvateAt: dayjs().toDate()
+      }
+    }}
+  )
+}
+
+export { getUserByLoginId, signup, getUsers, getUserById, deactvateUser }
