@@ -62,3 +62,6 @@ typings/
 
 #typescript outFiles
 dist
+
+#apiTest file
+*.http
