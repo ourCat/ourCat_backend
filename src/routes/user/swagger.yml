@@ -100,6 +100,63 @@ paths:
             `Invalid loginId or password` 로그인 ID 또는 password가 잘못됨
         500:
           description: '**관리자에게 문의하세요**'
+  /user/delete-code:
+    get:
+      tags: 
+      - User
+      summary: 회원탈퇴시 랜덤코드 발급 (유효시간 5분)
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: Ay0xgt
+        403:
+          description: '`Forbidden` token 만료'
+        500:
+          description: '**관리자에게 문의하세요**'
+  /user/deactivate:
+    post:
+      tags:
+      - User
+      summary: 회원탈퇴 API
+      parameters:
+      - in: query
+        name: code
+        schema:
+          type: string
+          example: Ay0xgt
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+        400:
+          description: '`BadRequest` 코드를 입력하지 않거나 유효하지 않은 코드 입력'
+        403:
+          description: '`Forbidden` token 만료'
+        500:
+          description: '**관리자에게 문의하세요**'
+
 
 components:
   schemas:
