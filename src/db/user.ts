@@ -1,4 +1,5 @@
 import connect from 'utils/mongoConnect'
+import {ObjectId} from 'mongodb'
 import {User, FoundUser} from './interface'
 
 import dayjs from 'dayjs'
@@ -17,7 +18,8 @@ async function getUserByLoginId(loginId : string): Promise<FoundUser> {
   const db = await connect()
   return await db.collection('User').findOne(
     {
-      loginId
+      loginId,
+      deactvate: {$exists: false}
     }
   )
 }
