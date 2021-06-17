@@ -44,4 +44,11 @@ async function getUsers() : Promise<Array<FoundUser>> {
   return await db.collection('User').find({deactvate: {$exists: false}}, {sort: {_id: -1}, limit: 20}).toArray()
 }
 
-export { getUserByLoginId, signup, getUsers }
+async function getUserById(userId: string) : Promise<FoundUser> {
+  const db = await connect()
+  return await db.collection('User').findOne(
+    {_id: ObjectId(userId), deactivate: {$exists: false}}
+  )
+}
+
+export { getUserByLoginId, signup, getUsers, getUserById }
