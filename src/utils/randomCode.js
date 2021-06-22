@@ -1,7 +1,7 @@
 /**
  * random code를 만드는 함수
  * @param {number} length 
- * @returns 
+ * @returns {string} randomCode
  */
 function makeRandomCode(length) {
   const result = []
