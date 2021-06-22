@@ -4,6 +4,9 @@ import bcrypt from 'bcrypt'
 import asyncWrap from 'utils/asyncWrap'
 import jwt from 'jsonwebtoken'
 import createError from 'http-errors'
+import accessMiddleware from 'middlewares/access'
+import {makeRandomCode} from 'utils/randomCode'
+import codeTable from 'utils/deleteCode'
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -12,7 +15,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Seoul')
 
-import {getUserByLoginId, signup, getUsers } from 'db/user'
+import {getUserByLoginId, signup, getUsers, deactvateUser } from 'db/user'
 
 router.get('/', asyncWrap(async (req: Request, res: Response) => {
   const users = await getUsers()
@@ -78,4 +81,29 @@ router.post('/signin', asyncWrap(async (req: Request, res: Response) => {
 
   res.status(200).json({userToken})
 }))
+
+router.get('/delete-Code', accessMiddleware, (req: Request, res: Response) => {
+  const {userId} : {userId: string} = req
+  const code: string = makeRandomCode(6)
+
+  codeTable.set(userId, code)
+  setTimeout( () => { codeTable.delete(userId)}, 300000)
+  res.status(200).json({code})
+})
+
+router.post('/deactivate', accessMiddleware, asyncWrap(async (req: Request, res: Response) => {
+  const {userId} : {userId: string} = req
+  const {code} : {code: string} = req.query
+  const {reason} : {reason: string} = req.body
+
+  const deleteCode = codeTable.get(userId)
+  if(deleteCode === code) {
+    await deactvateUser(userId, reason)
+    delete codeTable[userId]
+  } else {
+    throw createError(400, 'Invalid Code')
+  }
+  res.status(200).json({status: 'OK'})
+}))
+
 export default router
