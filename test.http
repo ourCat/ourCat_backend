@@ -1,5 +1,6 @@
 @local = http://localhost:3000
-
+@userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGFlNzQxZmU3Zjk0ODE3ZGQ3OTE2ZDYiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYyNzk5NDE3OCwiaWF0IjoxNjI1NDAyMTc4fQ.0zUMIxzU8St1qSnPhG4nagewyF3BsMeHrF0uN7Kk6Po
+@acces = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGFlNzQxZmU3Zjk0ODE3ZGQ3OTE2ZDYiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYyNTQwNTkyOCwiaWF0IjoxNjI1NDA0MTI4fQ.RjO_kU5gc8cWoIy1HztU-hkNyIVh1jQmfpyDsJ3ak-Q
 {{local}}/user
 ###
 POST {{local}}/user/signin
@@ -7,9 +8,31 @@ Content-Type: application/json
 
 {
   "loginId": "apitest@test.com",
-  "password" : "1q2w3e4r@@"
+  "password" : "1q2w3e4r!!"
 }
 
 ###
 {{local}}/token
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGFlNzQxZmU3Zjk0ODE3ZGQ3OTE2ZDYiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYyNTU2Mjg0NCwiaWF0IjoxNjIyOTcwODQ0fQ.mUgkTIzeff4t6b0_Lueggg4OUT7BmldRDDqs2TFiZX0
+Authorization: {{userToken}}
+###
+{{local}}/user
+Authorization: {{acces}}
+###
+PATCH {{local}}/user
+Content-Type: application/json
+Authorization: {{acces}}
+
+{
+  "nickName" : "Edit TEST",
+  "introduction" : "Hello!! This is test!!"
+}
+###
+PUT {{local}}/user/password
+Content-Type: application/json
+Authorization: {{acces}}
+
+{
+  "password" : "1q2w3e4r!!",
+  "newPassword": "1q2w3e4r@@",
+  "newPasswordConfirm" : "1q2w3e4r@@"
+}
