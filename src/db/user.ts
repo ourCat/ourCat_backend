@@ -94,11 +94,28 @@ async function editUserInfo(userId: string, editInfo: EditUser) : Promise<void> 
   )
 }
 
+/**
+ * 비밀번호 변경
+ * @param userId 
+ * @param newPassword 
+ */
+async function editPassword(userId: string, newPassword: string) : Promise<void> {
+  const db = await connect()
+  await db.collection('User').updateOne(
+    { _id: ObjectId(userId)},
+    { $set: {
+      password: newPassword,
+      updatedAt: dayjs().toDate()
+    }}
+  )
+}
+
 export {
   getUserByLoginId,
   signup,
   getUsers,
   getUserById,
   deactvateUser,
-  editUserInfo
+  editUserInfo,
+  editPassword
 }
