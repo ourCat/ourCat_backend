@@ -1,6 +1,7 @@
 import connect from 'utils/mongoConnect'
 import {ObjectId} from 'mongodb'
-import {User, FoundUser} from './interface'
+import {User, FoundUser, EditUser} from './interface'
+import nullFilter from 'utils/nullFilter'
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -51,9 +52,15 @@ async function getUsers() : Promise<Array<FoundUser>> {
  */
 async function getUserById(userId: string) : Promise<FoundUser> {
   const db = await connect()
-  return await db.collection('User').findOne(
-    {_id: ObjectId(userId), deactivate: {$exists: false}}
+  const {value} = await db.collection('User').findOneAndUpdate(
+    {_id: ObjectId(userId), deactivate: {$exists: false}},
+    { $set: {
+      lastAccessedAt: dayjs().toDate()
+    }},
+    {returnDocument: 'after'}
   )
+
+  return value
 }
 
 /**
@@ -75,4 +82,46 @@ async function deactvateUser(userId: string, reason: string) : Promise<void> {
   )
 }
 
-export { getUserByLoginId, signup, getUsers, getUserById, deactvateUser }
+/**
+ * 사용자 정보변경
+ * @param userId 
+ * @param editInfo 
+ */
+async function editUserInfo(userId: string, editInfo: EditUser) : Promise<void> {
+  const {nickName, gender, introduction} = editInfo
+
+  let $set = {nickName, gender, introduction, updatedAt: dayjs().toDate()}
+  $set = nullFilter($set)
+  const db = await connect()
+
+  await db.collection('User').updateOne(
+    {_id: ObjectId(userId)},
+    { $set }
+  )
+}
+
+/**
+ * 비밀번호 변경
+ * @param userId 
+ * @param newPassword 
+ */
+async function editPassword(userId: string, newPassword: string) : Promise<void> {
+  const db = await connect()
+  await db.collection('User').updateOne(
+    { _id: ObjectId(userId)},
+    { $set: {
+      password: newPassword,
+      updatedAt: dayjs().toDate()
+    }}
+  )
+}
+
+export {
+  getUserByLoginId,
+  signup,
+  getUsers,
+  getUserById,
+  deactvateUser,
+  editUserInfo,
+  editPassword
+}

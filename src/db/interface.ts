@@ -26,4 +26,11 @@ interface FoundUser extends User {
   _id: string
 }
 
-export {Location, User, FoundUser}
+interface EditUser {
+  nickName?: string | null
+  gender?: string | null
+  introduction? :string | null
+  updatedAt? : Date
+}
+
+export {Location, User, FoundUser, EditUser}

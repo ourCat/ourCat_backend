@@ -4,6 +4,51 @@ tags:
 
 
 paths:
+  /user:
+    get:
+      tags:
+      - User
+      security:
+      - token: []
+      summary: 사용자 정보 API
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        403:
+          description: '`Unauthorized` token 만료'
+        500:
+          description: '**관리자에게 문의하세요**'
+    patch:
+      tags:
+      - User
+      security:
+      - token: []
+      summary: 회원정보 수정 API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nickName:
+                  type: string
+                gender:
+                  type: string
+                instroduction:
+                  type: string
+        required: true
+      responses:
+        200:
+          $ref: '#/responses/OK'
+        400:
+          description: '`Invalid gender value` gender 포함시 M이거나 F가 아닐 때'
+        403:
+          description: '`Forbidden` token 만료'
+        500:
+          description: '**관리자에게 문의하세요**'
   /user/signup:
     post:
       tags:
@@ -104,6 +149,8 @@ paths:
     get:
       tags: 
       - User
+      security:
+      - token: []
       summary: 회원탈퇴시 랜덤코드 발급 (유효시간 5분)
       responses:
         200:
@@ -116,13 +163,15 @@ paths:
                     type: string
                     example: Ay0xgt
         403:
-          description: '`Forbidden` token 만료'
+          description: '`Unauthorized` token 만료'
         500:
           description: '**관리자에게 문의하세요**'
   /user/deactivate:
     post:
       tags:
       - User
+      security:
+      - token: []
       summary: 회원탈퇴 API
       parameters:
       - in: query
@@ -151,13 +200,56 @@ paths:
                     type: string
                     example: OK
         400:
-          description: '`BadRequest` 코드를 입력하지 않거나 유효하지 않은 코드 입력'
+          description: '`Invalid Code` 코드를 입력하지 않거나 유효하지 않은 코드 입력'
         403:
-          description: '`Forbidden` token 만료'
+          description: '`Unauthorized` token 만료'
         500:
           description: '**관리자에게 문의하세요**'
+  /user/password:
+    put:
+      tags:
+      - User
+      security:
+      - token: []
+      summary: 비밀번호 변경 API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: 사용하던 비밀번호
+                newPassword:
+                  type: string
+                  description: 변경 할 비밀번호
+                newPasswordConfirm:
+                  type: string
+                  description: 변경 할 비밀번호확인
+              required:
+              - password
+              - newPassword
+              - newPasswordConfirm
+        required: true
+      responses:
+        200:
+          $ref: '#/responses/OK'
+        400:
+          description: |
+            `Required Body` password, newPassword, newPasswordConfirm 누락
 
+            `Invalid password` 비밀번호 불일치
+            
+            `Password must be New` 기존 비밀번호와 같음
 
+            `Invalid PasswordType` 비밀번호 규칙위반 (8~20자리 문자, 숫자 1개이상 필수)
+
+            `Unmatched newPassword and newPasswordConfirm` 변경할 비밀번호와 확인 불일치
+        403:
+          description: '`Unauthorized` token 만료'
+        500:
+          description: '**관리자에게 문의하세요**'
 components:
   schemas:
     User:
@@ -173,3 +265,38 @@ components:
           type: string
         mobileNo:
           type: string
+        gender:
+          type: string
+        lastAccessedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        socialId:
+          type: string
+        introduction:
+          type: string
+      required:
+      - _id
+      - loginId
+      - nickName
+      - gender
+      - createdAt
+      - updatedAt
+      - lastAccessedAt
+
+responses:
+  OK:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example : 'OK'
+
