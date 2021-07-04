@@ -1,6 +1,7 @@
 import connect from 'utils/mongoConnect'
 import {ObjectId} from 'mongodb'
-import {User, FoundUser} from './interface'
+import {User, FoundUser, EditUser} from './interface'
+import nullFilter from 'utils/nullFilter'
 
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -75,4 +76,29 @@ async function deactvateUser(userId: string, reason: string) : Promise<void> {
   )
 }
 
-export { getUserByLoginId, signup, getUsers, getUserById, deactvateUser }
+/**
+ * 사용자 정보변경
+ * @param userId 
+ * @param editInfo 
+ */
+async function editUserInfo(userId: string, editInfo: EditUser) : Promise<void> {
+  const {nickName, gender, introduction} = editInfo
+
+  let $set = {nickName, gender, introduction, updatedAt: dayjs().toDate()}
+  $set = nullFilter($set)
+  const db = await connect()
+
+  await db.collection('User').updateOne(
+    {_id: ObjectId(userId)},
+    { $set }
+  )
+}
+
+export {
+  getUserByLoginId,
+  signup,
+  getUsers,
+  getUserById,
+  deactvateUser,
+  editUserInfo
+}
