@@ -52,9 +52,15 @@ async function getUsers() : Promise<Array<FoundUser>> {
  */
 async function getUserById(userId: string) : Promise<FoundUser> {
   const db = await connect()
-  return await db.collection('User').findOne(
-    {_id: ObjectId(userId), deactivate: {$exists: false}}
+  const {value} = await db.collection('User').findOneAndUpdate(
+    {_id: ObjectId(userId), deactivate: {$exists: false}},
+    { $set: {
+      lastAccessedAt: dayjs().toDate()
+    }},
+    {returnDocument: 'after'}
   )
+
+  return value
 }
 
 /**
