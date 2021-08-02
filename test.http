@@ -36,3 +36,6 @@ Authorization: {{acces}}
   "newPassword": "1q2w3e4r@@",
   "newPasswordConfirm" : "1q2w3e4r@@"
 }
+
+###
+{{local}}/user/check?nickname=test
