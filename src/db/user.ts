@@ -26,6 +26,21 @@ async function getUserByLoginId(loginId : string): Promise<FoundUser> {
 }
 
 /**
+ * nickname으로 user를 찾아 리턴하는 함수
+ * @param nickname 
+ * @returns User Object
+ */
+async function getUserByNickname(nickname: string): Promise<FoundUser> {
+  const db = await connect()
+  return await db.collection('User').findOne(
+    {
+      nickname,
+      deactvate: {$exists: false}
+    }
+  )
+}
+
+/**
  * 회원가입 함수
  * @param user 
  */
@@ -88,9 +103,9 @@ async function deactvateUser(userId: string, reason: string) : Promise<void> {
  * @param editInfo 
  */
 async function editUserInfo(userId: string, editInfo: EditUser) : Promise<void> {
-  const {nickName, gender, introduction} = editInfo
+  const {nickname, gender, introduction} = editInfo
 
-  let $set = {nickName, gender, introduction, updatedAt: dayjs().toDate()}
+  let $set = {nickname, gender, introduction, updatedAt: dayjs().toDate()}
   $set = nullFilter($set)
   const db = await connect()
 
@@ -121,6 +136,7 @@ export {
   signup,
   getUsers,
   getUserById,
+  getUserByNickname,
   deactvateUser,
   editUserInfo,
   editPassword

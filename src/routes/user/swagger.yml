@@ -33,7 +33,7 @@ paths:
             schema:
               type: object
               properties:
-                nickName:
+                nickname:
                   type: string
                 gender:
                   type: string
@@ -49,6 +49,34 @@ paths:
           description: '`Forbidden` token 만료'
         500:
           description: '**관리자에게 문의하세요**'
+  /user/check:
+    get:
+      tags:
+      - User
+      summary: nickname 또는 email주소 중복확인
+      parameters:
+      - in: query
+        name: nickname
+        schema:
+          type: string
+      - in: query
+        name: email
+        schema:
+          type: string
+      responses:
+        200:
+          $ref: '#/responses/OK'
+        400:
+          description: |
+            `Required nickname or email` nickname과 email 모두 누락 (최소 하나의 값은 필수)
+
+            `email already exists` 동일한 email 주소 이미 사용중
+
+            `nickname already exists` 동일한 nickname 이미 사용중
+        500:
+          description:
+            '**관리자에게 문의하세요**'
+
   /user/signup:
     post:
       tags:
@@ -60,7 +88,7 @@ paths:
             schema:
               type: object
               properties:
-                nickName:
+                nickname:
                   type: string
                   description: 사용자 nickname
                 email:
@@ -80,7 +108,7 @@ paths:
                   enum: [M, F]
                   description: 성별
               required:
-              - nickName
+              - nickname
               - email
               - password
               - passwordConfirm
@@ -105,8 +133,6 @@ paths:
             `Invalid PasswordType` 비밀번호 요구사항 미달 - 8~20자리 숫자와 문자 최소 1개 포함
 
             `Unmatched password and passwordConfirm` 비밀번호와 비밀번호확인 불일치
-
-            `Id Already exists` 이미 존재하는 login Id (email 주소)
         500:
           description: '**관리자에게 문의하세요**'
   /user/signin:
@@ -259,7 +285,7 @@ components:
           type: string
         loginId:
           type: string
-        nickName:
+        nickname:
           type: string
         email:
           type: string
@@ -283,7 +309,7 @@ components:
       required:
       - _id
       - loginId
-      - nickName
+      - nickname
       - gender
       - createdAt
       - updatedAt

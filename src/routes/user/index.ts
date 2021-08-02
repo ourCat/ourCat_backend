@@ -16,7 +16,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Seoul')
 
-import {getUserByLoginId, signup, deactvateUser, editUserInfo, editPassword} from 'db/user'
+import {getUserByLoginId, getUserByNickname, signup, deactvateUser, editUserInfo, editPassword} from 'db/user'
 import { FoundUser } from 'db/interface'
 
 router.get('/', accessMiddleware, userMiddleware, (req: Request, res: Response) => {
@@ -28,10 +28,10 @@ router.get('/', accessMiddleware, userMiddleware, (req: Request, res: Response) 
 router.patch('/', accessMiddleware, asyncWrap( async (req: Request, res: Response) => {
   const {userId} : {userId : string} = req
   const {gender, introduction} : {gender: string | null, introduction: string | null} = req.body
-  let {nickName} : {nickName: string | null } = req.body
+  let {nickname} : {nickname: string | null } = req.body
   if(gender && gender !== 'M' && gender !== 'F') throw createError(400, 'Invalid gender value')
-  if(nickName) nickName = nickName.trim()
-  await editUserInfo(userId, {nickName, gender, introduction})
+  if(nickname) nickname = nickname.trim()
+  await editUserInfo(userId, {nickname, gender, introduction})
   res.status(200).json({status: 'OK'})
 }))
 
@@ -58,13 +58,13 @@ router.put('/password', accessMiddleware, userMiddleware, asyncWrap( async (req:
 router.post('/signup', asyncWrap(async (req: Request, res: Response) => {
   const { email, password, passwordConfirm, mobileNo, gender }:
   {email: string, password: string, passwordConfirm: string, mobileNo: string, gender: string} = req.body
-  let { nickName }: {nickName: string} = req.body
+  let { nickname }: {nickname: string} = req.body
 
-  if(!nickName || !email || !password || !passwordConfirm || !gender ) {
+  if(!nickname || !email || !password || !passwordConfirm || !gender ) {
     throw createError(400, 'Required Body')
   }
 
-  nickName = nickName.trim()
+  nickname = nickname.trim()
 
   if(!(gender === 'M' || gender === 'F')) throw createError(400, 'Invalid gender value')
 
@@ -76,14 +76,12 @@ router.post('/signup', asyncWrap(async (req: Request, res: Response) => {
     throw createError(400, 'Unmatched password and passwordConfirm')
   }
 
-  const resisterdUser = await getUserByLoginId(email)
-  if(resisterdUser) throw createError(400, 'Id Already exists')
   const hashedPassword: string = await bcrypt.hash(password, 10)
   
   const now = dayjs().toDate()
   const user = {
     loginId: email,
-    nickName,
+    nickname,
     email,
     password: hashedPassword,
     mobileNo: mobileNo ? mobileNo : undefined,
@@ -136,6 +134,20 @@ router.post('/deactivate', accessMiddleware, asyncWrap(async (req: Request, res:
   } else {
     throw createError(400, 'Invalid Code')
   }
+  res.status(200).json({status: 'OK'})
+}))
+
+router.get('/check', asyncWrap(async (req: Request, res: Response) => {
+  const {nickname, email} = req.query
+  if (!(nickname || email)) throw createError(400, 'Required nickname or email')
+  else if(email) {
+    const resisterdUser = await getUserByLoginId(email)
+    if (resisterdUser) throw createError(400, 'email already exists')
+  } else if(nickname) {
+    const resisterdUser = await getUserByNickname(nickname)
+    if (resisterdUser) throw createError(400, 'nickname already exists')
+  }
+
   res.status(200).json({status: 'OK'})
 }))
 

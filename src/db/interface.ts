@@ -13,7 +13,7 @@ interface User {
   mobileNo?: string
   email: string
   gender: string
-  nickName: string
+  nickname: string
   location?: Location
   introduction?: string
   lastAccessedAt: Date
@@ -27,7 +27,7 @@ interface FoundUser extends User {
 }
 
 interface EditUser {
-  nickName?: string | null
+  nickname?: string | null
   gender?: string | null
   introduction? :string | null
   updatedAt? : Date
