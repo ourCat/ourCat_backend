@@ -33,7 +33,7 @@ paths:
             schema:
               type: object
               properties:
-                nickName:
+                nickname:
                   type: string
                 gender:
                   type: string
@@ -60,7 +60,7 @@ paths:
             schema:
               type: object
               properties:
-                nickName:
+                nickname:
                   type: string
                   description: 사용자 nickname
                 email:
@@ -80,7 +80,7 @@ paths:
                   enum: [M, F]
                   description: 성별
               required:
-              - nickName
+              - nickname
               - email
               - password
               - passwordConfirm
@@ -259,7 +259,7 @@ components:
           type: string
         loginId:
           type: string
-        nickName:
+        nickname:
           type: string
         email:
           type: string
@@ -283,7 +283,7 @@ components:
       required:
       - _id
       - loginId
-      - nickName
+      - nickname
       - gender
       - createdAt
       - updatedAt

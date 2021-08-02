@@ -88,9 +88,9 @@ async function deactvateUser(userId: string, reason: string) : Promise<void> {
  * @param editInfo 
  */
 async function editUserInfo(userId: string, editInfo: EditUser) : Promise<void> {
-  const {nickName, gender, introduction} = editInfo
+  const {nickname, gender, introduction} = editInfo
 
-  let $set = {nickName, gender, introduction, updatedAt: dayjs().toDate()}
+  let $set = {nickname, gender, introduction, updatedAt: dayjs().toDate()}
   $set = nullFilter($set)
   const db = await connect()
 
