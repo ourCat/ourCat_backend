@@ -16,7 +16,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Seoul')
 
-import {getUserByLoginId, signup, deactvateUser, editUserInfo, editPassword} from 'db/user'
+import {getUserByLoginId, getUserByNickname, signup, deactvateUser, editUserInfo, editPassword} from 'db/user'
 import { FoundUser } from 'db/interface'
 
 router.get('/', accessMiddleware, userMiddleware, (req: Request, res: Response) => {
@@ -76,8 +76,6 @@ router.post('/signup', asyncWrap(async (req: Request, res: Response) => {
     throw createError(400, 'Unmatched password and passwordConfirm')
   }
 
-  const resisterdUser = await getUserByLoginId(email)
-  if(resisterdUser) throw createError(400, 'Id Already exists')
   const hashedPassword: string = await bcrypt.hash(password, 10)
   
   const now = dayjs().toDate()
@@ -136,6 +134,20 @@ router.post('/deactivate', accessMiddleware, asyncWrap(async (req: Request, res:
   } else {
     throw createError(400, 'Invalid Code')
   }
+  res.status(200).json({status: 'OK'})
+}))
+
+router.get('/check', asyncWrap(async (req: Request, res: Response) => {
+  const {nickname, email} = req.query
+  if (!(nickname || email)) throw createError(400, 'Required nickname or email')
+  else if(email) {
+    const resisterdUser = await getUserByLoginId(email)
+    if (resisterdUser) throw createError(400, 'email already exists')
+  } else if(nickname) {
+    const resisterdUser = await getUserByNickname(nickname)
+    if (resisterdUser) throw createError(400, 'nickname already exists')
+  }
+
   res.status(200).json({status: 'OK'})
 }))
 
