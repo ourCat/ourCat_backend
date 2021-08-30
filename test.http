@@ -1,6 +1,9 @@
 @local = http://localhost:3000
 @userToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGFlNzQxZmU3Zjk0ODE3ZGQ3OTE2ZDYiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYyNzk5NDE3OCwiaWF0IjoxNjI1NDAyMTc4fQ.0zUMIxzU8St1qSnPhG4nagewyF3BsMeHrF0uN7Kk6Po
 @acces = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGFlNzQxZmU3Zjk0ODE3ZGQ3OTE2ZDYiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYyNTQwNTkyOCwiaWF0IjoxNjI1NDA0MTI4fQ.RjO_kU5gc8cWoIy1HztU-hkNyIVh1jQmfpyDsJ3ak-Q
+@kakao = https://kauth.kakao.com/oauth/authorize
+@ttoken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTJjZmFkZjBkNDYwMjA3ODc4NWE3MjUiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYzMjkzMDIzNiwiaWF0IjoxNjMwMzM4MjM2fQ.meB91sFBLe5x1JElwjh8ny6qcS8_oJ2W3W98M_C0Gdo
+@acces = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTJjZmFkZjBkNDYwMjA3ODc4NWE3MjUiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYzMDM0MDA3OSwiaWF0IjoxNjMwMzM4Mjc5fQ.CBoAaYWE9KJK-ZB6puxh3RBC2NNOGg1RrPENJTR4sC8
 {{local}}/user
 ###
 POST {{local}}/user/signin
@@ -8,12 +11,12 @@ Content-Type: application/json
 
 {
   "loginId": "apitest@test.com",
-  "password" : "1q2w3e4r!!"
+  "password" : "1q2w3e4r@@"
 }
 
 ###
 {{local}}/token
-Authorization: {{userToken}}
+Authorization: {{ttoken}}
 ###
 {{local}}/user
 Authorization: {{acces}}
@@ -39,3 +42,24 @@ Authorization: {{acces}}
 
 ###
 {{local}}/user/check?nickname=test
+###
+{{kakao}}?response_type=code&client_id=57906265c21e5edfdd40145bbf25745c&redirect_uri=http://localhost:3000/callback/kakao
+###
+POST {{local}}/user/social
+Content-Type: application/json
+
+{
+  "code": "STvro/ZFelEKpBOqb4+924sWYj+9PGiONDCKHK9uwH7Hf2Wek6x5xWim5miL3XsbhZ0JUl9zwtZtoUNDqRnh6A==",
+  "redirect_uri" : "http://localhost:4000/callback/kakao"
+}
+###
+
+{{kakao}}?client_id=57906265c21e5edfdd40145bbf25745c&redirect_uri=http://localhost:4000/callback/kakao&response_type=code
+###
+POST {{local}}/user/social/kakao
+Content-Type: application/json
+
+{
+  "token" : "-mj3n21fxSkya_ydL2kdkrwzDtyy6wVA3r29Uwo9c5oAAAF7l7O__w"
+}
+###
