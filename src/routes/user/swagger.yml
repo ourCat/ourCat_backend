@@ -1,6 +1,8 @@
 tags:
-  name: User
-  description: User 관련 API
+  - name: User
+    description: User 관련 API
+  - name: Social
+    description: social login 관련 API
 
 
 paths:
@@ -156,14 +158,7 @@ paths:
         required: true
       responses:
         200:
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  userToken:
-                    type: string
-                    description: 로그인시 부여되는 토큰
+          $ref: '#/responses/userToken'
         400:
           description: |
             `Required Body` 로그인ID 또는 password 누락
@@ -276,6 +271,36 @@ paths:
           description: '`Unauthorized` token 만료'
         500:
           description: '**관리자에게 문의하세요**'
+
+  /user/social/kakao:
+    post:
+      tags:
+      - Social
+      security:
+      - token: []
+      summary: kakao social login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: kakao에서 부여한 access token
+              required:
+              - token
+        required: true
+      responses:
+        200:
+          $ref: '#/responses/userToken'
+        401:
+          description: '`Invalid Token or expired` kakao token이 유효하지 않음'
+        500:
+          description: '**관리자에게 문의하세요**'
+
+
+
 components:
   schemas:
     User:
@@ -325,4 +350,13 @@ responses:
             status:
               type: string
               example : 'OK'
+  userToken:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userToken:
+              type: string
+              example : 'NiIsInR5cCI6IkpXVCySWQiOiI2MTJjZmFkZjBkNDYwMjA3ODc4NWE3MjUiLCJpc3MiOiJkZXYtQ2F0cyIsImV4cCI6MTYzMjkzMDIzNiwiaWF0IjoxNjMwMzM4MjM2fQ.meB91sFBLe5x1JElwjh8ny6qcS8_oJ2W3W'
 
