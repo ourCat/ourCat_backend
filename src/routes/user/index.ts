@@ -19,6 +19,9 @@ dayjs.tz.setDefault('Asia/Seoul')
 import {getUserByLoginId, getUserByNickname, signup, deactvateUser, editUserInfo, editPassword} from 'db/user'
 import { FoundUser } from 'db/interface'
 
+import social from './social'
+
+router.use('/social', social)
 router.get('/', accessMiddleware, userMiddleware, (req: Request, res: Response) => {
   const user: FoundUser = req.user
   delete user.password
