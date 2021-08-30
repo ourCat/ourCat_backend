@@ -1,3 +1,5 @@
+import {ObjectId} from 'mongodb'
+
 interface Location {
   country: string
   region: string
@@ -33,4 +35,13 @@ interface EditUser {
   updatedAt? : Date
 }
 
-export {Location, User, FoundUser, EditUser}
+interface signUpResult {
+  insertedCount: number //The total amount of documents inserted.
+  insertedId: ObjectId //The driver generated ObjectId for the insert operation.
+  result: { //The raw command result object returned from MongoDB (content might vary by server version).
+    ok: number //Is 1 if the command executed correctly.
+    n: number //The total count of documents inserted.
+  } 
+}
+
+export {Location, User, FoundUser, EditUser, signUpResult}

@@ -1,6 +1,6 @@
 import connect from 'utils/mongoConnect'
 import {ObjectId} from 'mongodb'
-import {User, FoundUser, EditUser} from './interface'
+import {User, FoundUser, EditUser, signUpResult} from './interface'
 import nullFilter from 'utils/nullFilter'
 
 import dayjs from 'dayjs'
@@ -44,9 +44,9 @@ async function getUserByNickname(nickname: string): Promise<FoundUser> {
  * 회원가입 함수
  * @param user 
  */
-async function signup(user: User): Promise<void> {
+async function signup(user: User): Promise<signUpResult> {
   const db = await connect()
-  await db.collection('User').insertOne(
+  return await db.collection('User').insertOne(
     user
   )
 }
@@ -131,6 +131,16 @@ async function editPassword(userId: string, newPassword: string) : Promise<void>
   )
 }
 
+async function updateLastAccessedAt(userId: string) : Promise<void> {
+  const db = await connect()
+  await db.collection('User').updateOne(
+    {_id: ObjectId(userId)},
+    { $set: {
+      lastAccessedAt: dayjs().toDate()
+    }}
+  )
+}
+
 export {
   getUserByLoginId,
   signup,
@@ -139,5 +149,6 @@ export {
   getUserByNickname,
   deactvateUser,
   editUserInfo,
-  editPassword
+  editPassword,
+  updateLastAccessedAt
 }
