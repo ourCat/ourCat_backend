@@ -298,7 +298,32 @@ paths:
           description: '`Invalid Token or expired` kakao token이 유효하지 않음'
         500:
           description: '**관리자에게 문의하세요**'
-
+  /user/social/naver:
+    post:
+      tags:
+      - Social
+      security:
+      - token: []
+      summary: naver social login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: naver에서 부여한 access token
+              required:
+              - token
+        required: true
+      responses:
+        200:
+          $ref: '#/responses/userToken'
+        401:
+          description: '`Invalid Token or expired` naver token이 유효하지 않음'
+        500:
+          description: '**관리자에게 문의하세요**'
 
 
 components:
