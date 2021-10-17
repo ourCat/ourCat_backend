@@ -3,11 +3,13 @@ import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 import swagger from './swagger/swagger'
 import user from './user'
+import cat from './cat'
 
 const router = Router()
 
 router.use('/user', user)
 router.use('/api', swagger)
+router.use('/cat', cat)
 
 router.get('/token', (req: Request, res: Response) => {
   const { authorization } = req.headers
