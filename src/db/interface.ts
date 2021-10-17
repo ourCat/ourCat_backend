@@ -44,4 +44,19 @@ interface signUpResult {
   } 
 }
 
-export {Location, User, FoundUser, EditUser, signUpResult}
+interface Cat {
+  name: string
+  profilePicture?: string
+  age: number
+  location: string
+  features: string[]
+  color: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+interface FoundCat extends Cat {
+  _id: string
+}
+
+export {Location, User, FoundUser, EditUser, signUpResult, Cat, FoundCat}
