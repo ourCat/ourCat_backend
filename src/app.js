@@ -5,9 +5,13 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const app = express()
+const helmet = require('helmet')
 const cors = require('cors')
 
 require('app-module-path').addPath(__dirname)
+
+app.use(helmet()) // set security-related HTTP response headers
+
 app.use(cors({
   origin: ['http://localhost:3000', 'https://localhost:3000'],
   methods: 'GET, HEAD, PUT, PATCH, POST, DELETE'
